@@ -1,5 +1,8 @@
 <div>
-  Title: {{result._source.track_name_si }}<br />
-  Artist: {{result._source.artist_name_si}}<br />
-  Lyrics: {{result._source.lyrics}}<br />
+  Title: {{song.title_si }}<br />Artist: {{song.artist_si}}<br />Composer:
+  {{song.composer_si}}<br />Writer: {{song.writer}}</br>Genre: {{song.genre_si}}
+
+  Lyrics:
+  <div class="pre-formatted">{{song.lyrics}}</div>
+  <br />
 </div>

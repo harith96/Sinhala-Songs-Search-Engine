@@ -25,7 +25,8 @@
         "names-search-analyser-si": {
           "type": "custom",
           "tokenizer": "icu_tokenizer",
-          "char_filter": ["punctuation_char_filter"]
+          "char_filter": ["punctuation_char_filter"],
+          "filter": ["sinhala_stop_filter"]
         },
         "english-search-analyzer": {
           "type": "custom",
@@ -36,7 +37,15 @@
       "char_filter": {
         "punctuation_char_filter": {
           "type": "mapping",
-          "mappings": [".=>", "|=>", "-=>", "_=>", "'=>", "/=>", ",=> "]
+          "mappings": [
+            ".=>\\u0020",
+            "|=>",
+            "-=>",
+            "_=>",
+            "'=>",
+            "/=>",
+            ",=>\\u0020"
+          ]
         }
       },
       "filter": {
@@ -44,6 +53,10 @@
           "type": "edge_ngram",
           "min_gram": "2",
           "max_gram": "10"
+        },
+        "sinhala_stop_filter": {
+          "type": "stop",
+          "stopwords": ["සහ", "හා", "වැනි", "සේ", "‌මෙන්", "සමග"]
         }
       }
     }

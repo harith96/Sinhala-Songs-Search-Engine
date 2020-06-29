@@ -114,7 +114,7 @@
   const Song = {
     props: { song: Object },
     template:
-      "<div>Title: {{song.title_si }}<br />Artist: {{song.artist_si}}<br />Lyrics: <div class='pre-formatted'>{{song.lyrics}}</div><br /></div>",
+      '<div>Title: {{song.title_si }}<br />Artist: {{song.artist_si}}<br />Composer:{{song.composer_si}}<br />Writer: {{song.writer}}</br>Genre: {{song.genre_si}} <br/> Popularity index: {{song.n_visits}}<br/>Lyrics: <div class="pre-formatted">{{song.lyrics}}</div></div>',
   };
   const router = new VueRouter({
     routes: [
