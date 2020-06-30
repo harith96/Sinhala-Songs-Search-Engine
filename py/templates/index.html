@@ -114,7 +114,7 @@
   const Song = {
     props: { song: Object },
     template:
-      '<div>Title: {{song.title_si }}<br />Artist: {{song.artist_si}}<br />Composer:{{song.composer_si}}<br />Writer: {{song.writer}}</br>Genre: {{song.genre_si}} <br/> Popularity index: {{song.n_visits}}<br/>Lyrics: <div class="pre-formatted">{{song.lyrics}}</div></div>',
+      '<div>නම: {{song.title_si }} | {{song.title_en}}<br />ගායනය: {{song.artist_si}}<br />සංගීත අධ්‍යක්ෂණය: {{song.composer_si}}<br />පද රචනය: {{song.writer}}</br>ප්‍රභේදය: {{song.genre_si}} <br/> ජනප්‍රියතා දර්ශකය: {{song.n_visits}}<br/><br/>පද: <div class="pre-formatted">{{song.lyrics}}</div></div>',
   };
   const router = new VueRouter({
     routes: [

@@ -20,7 +20,7 @@
           "type": "custom",
           "tokenizer": "classic",
           "char_filter": ["punctuation_char_filter"],
-          "filter": ["edge_n_gram_filter"]
+          "filter": ["edge_n_gram_filter", "lowercase"]
         },
         "names-search-analyser-si": {
           "type": "custom",
@@ -31,7 +31,8 @@
         "english-search-analyzer": {
           "type": "custom",
           "tokenizer": "classic",
-          "char_filter": ["punctuation_char_filter"]
+          "char_filter": ["punctuation_char_filter"],
+          "filter": ["lowercase", "stop"]
         }
       },
       "char_filter": {
@@ -56,7 +57,18 @@
         },
         "sinhala_stop_filter": {
           "type": "stop",
-          "stopwords": ["සහ", "හා", "වැනි", "සේ", "‌මෙන්", "සමග"]
+          "stopwords": [
+            "සහ",
+            "හා",
+            "වැනි",
+            "සේ",
+            "‌මෙන්",
+            "සමග",
+            "කල",
+            "කළ",
+            "කරපු",
+            "කරන"
+          ]
         }
       }
     }
@@ -67,47 +79,62 @@
         "type": "integer"
       },
       "titile_en": {
-        "type": "search_as_you_type",
+        "type": "text",
         "analyzer": "english-analyzer",
         "search_analyzer": "english-search-analyzer"
       },
       "title_si": {
-        "type": "search_as_you_type",
+        "type": "text",
         "analyzer": "names-analyser-si",
         "search_analyzer": "names-search-analyser-si"
       },
       "artist": {
-        "type": "search_as_you_type",
+        "type": "text",
         "analyzer": "english-analyzer",
-        "search_analyzer": "english-search-analyzer"
+        "search_analyzer": "english-search-analyzer",
+        "fields": {
+          "keyword": {
+            "type": "keyword"
+          }
+        }
       },
       "artist_si": {
-        "type": "search_as_you_type",
+        "type": "text",
         "analyzer": "names-analyser-si",
         "search_analyzer": "names-search-analyser-si"
       },
       "genre": {
-        "type": "search_as_you_type",
+        "type": "text",
         "analyzer": "english-analyzer",
-        "search_analyzer": "english-search-analyzer"
+        "search_analyzer": "english-search-analyzer",
+        "fields": {
+          "keyword": {
+            "type": "keyword"
+          }
+        }
       },
       "genre_si": {
-        "type": "search_as_you_type",
+        "type": "text",
         "analyzer": "names-analyser-si",
         "search_analyzer": "names-search-analyser-si"
       },
       "writer": {
-        "type": "search_as_you_type",
+        "type": "text",
         "analyzer": "english-analyzer",
         "search_analyzer": "english-search-analyzer"
       },
       "composer": {
-        "type": "search_as_you_type",
+        "type": "text",
         "analyzer": "english-analyzer",
-        "search_analyzer": "english-search-analyzer"
+        "search_analyzer": "english-search-analyzer",
+        "fields": {
+          "keyword": {
+            "type": "keyword"
+          }
+        }
       },
       "composer_si": {
-        "type": "search_as_you_type",
+        "type": "text",
         "analyzer": "names-analyser-si",
         "search_analyzer": "names-search-analyser-si"
       },
@@ -116,7 +143,7 @@
         "index": false
       },
       "lyrics": {
-        "type": "search_as_you_type",
+        "type": "text",
         "analyzer": "lyrics-analyser-si"
       }
     }
