@@ -9,8 +9,8 @@
         "names-analyser-si": {
           "type": "custom",
           "tokenizer": "icu_tokenizer",
-          "char_filter": ["punctuation_char_filter"],
-          "filter": ["edge_n_gram_filter"]
+          "char_filter": ["punctuation-char-filter"],
+          "filter": ["edge-n-gram-filter"]
         },
         "lyrics-analyser-si": {
           "type": "custom",
@@ -19,24 +19,24 @@
         "english-analyzer": {
           "type": "custom",
           "tokenizer": "classic",
-          "char_filter": ["punctuation_char_filter"],
-          "filter": ["edge_n_gram_filter", "lowercase"]
+          "char_filter": ["punctuation-char-filter"],
+          "filter": ["edge-n-gram-filter", "lowercase"]
         },
         "names-search-analyser-si": {
           "type": "custom",
           "tokenizer": "icu_tokenizer",
-          "char_filter": ["punctuation_char_filter"],
-          "filter": ["sinhala_stop_filter"]
+          "char_filter": ["punctuation-char-filter"],
+          "filter": ["sinhala-stop-filter"]
         },
         "english-search-analyzer": {
           "type": "custom",
           "tokenizer": "classic",
-          "char_filter": ["punctuation_char_filter"],
+          "char_filter": ["punctuation-char-filter"],
           "filter": ["lowercase", "stop"]
         }
       },
       "char_filter": {
-        "punctuation_char_filter": {
+        "punctuation-char-filter": {
           "type": "mapping",
           "mappings": [
             ".=>\\u0020",
@@ -50,12 +50,12 @@
         }
       },
       "filter": {
-        "edge_n_gram_filter": {
+        "edge-n-gram-filter": {
           "type": "edge_ngram",
           "min_gram": "2",
           "max_gram": "10"
         },
-        "sinhala_stop_filter": {
+        "sinhala-stop-filter": {
           "type": "stop",
           "stopwords": [
             "සහ",

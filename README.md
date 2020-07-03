@@ -23,8 +23,8 @@ and for the following metadata in both Sinhala and English languages.
 .
 +-- corpus
 |   +-- index_id_add.ipynb - jupyter notebook for adding a id for each song document
-|   +-- lyrics_.json - processed songs corpus
-|   +-- songs.csv - raw songs corpus immediately after scraping
+|   +-- processed.json - processed songs corpus
+|   +-- raw.csv - raw songs corpus immediately after scraping
 |   +-- translator.ipynb - jupyter notebook for translating english metadata to sinhala
 +-- es
 |   +-- settings.json - settings and mappings for songs index
@@ -233,7 +233,7 @@ pip install -r requirements.txt
 python ./app.py
 ```
 
-2. Insert data into the `songs` index by sending a `POST` request to `insert_data` endpoint of the python server
+2. Insert data into the `songs` index by sending a `POST` request to `insert_data` endpoint of the python server [You may need check the path of processed corpus in ```app.py``` with related to current directory of ther terminal if current directory is different from the above step]
 
 ```
 POST http:\\localhost:5000\insert_data
