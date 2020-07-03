@@ -1,0 +1,267 @@
+# Sinhala Songs Search Engine
+
+Sinhala Songs Search Search Engine is an elasticsearch based web application with a backend and include details of more than 1000 Sinhala songs. Also, this application provides search-as-you-type functionality with a minimal clean UI implemented with Vue. Users can search for lyrics and based on popularity in Sinhala and for the following metadata in both Sinhala and English languages.
+
+1. Title
+2. Artist
+3. Writer
+4. Composer
+5. Genre
+
+## Architecture
+
+![Image of Yaktocat](https://octodex.github.com/images/yaktocat.png)
+
+## Getting Started
+
+These instructions will get you a copy of the project up and running on your local machine for development and testing purposes.
+
+### Folder Structure
+
+```
+.
++-- corpus
+|   +-- lyrics_.json - processed songs corpus
+|   +-- songs.csv - raw songs corpus immediately after scraping
++-- es
+|   +-- settings.json - settings and mappings for songs index
++-- scraping - scrapy project for scraping SinhalaSongBook website
++-- search-application - Flask application with UI templates
+```
+
+### Dataset
+
+The sinhala songs corpus is created by scraping [SinhalaSongBook](https://sinhalasongbook.com/) website using scrapy web scraping tool.
+
+### Prerequisites
+
+The following softwares/libraries should be installed in your system prior to setting up and running the application on a local or a live environment.
+
+- [Flask](https://flask.palletsprojects.com/en/1.1.x/) - The web framework used
+- [Elasticsearch](http://www.dropwizard.io/1.0.2/docs/) - Analytical Engine
+- [Sinling](https://github.com/ysenarath/sinling) - Sinhala language tokenizer
+- [Flask CORS](https://flask-cors.readthedocs.io/en/latest/) - Manage CORS in Flask
+
+### Installing
+
+A step by step series of examples that tell you how to get a development env running
+
+1. Get elasticsearch server up and running.
+
+2. Setup 'songs' index in elasticsearch using `settings.json` in `es` folder as the body.
+
+```
+PUT <elsticsearch-host: port>/songs
+{
+  "settings": {
+    "index": {
+      "number_of_shards": 1,
+      "number_of_replicas": 1
+    },
+    "analysis": {
+      "analyzer": {
+        "names-analyser-si": {
+          "type": "custom",
+          "tokenizer": "icu_tokenizer",
+          "char_filter": ["punctuation_char_filter"],
+          "filter": ["edge_n_gram_filter"]
+        },
+        "lyrics-analyser-si": {
+          "type": "custom",
+          "tokenizer": "icu_tokenizer"
+        },
+        "english-analyzer": {
+          "type": "custom",
+          "tokenizer": "classic",
+          "char_filter": ["punctuation_char_filter"],
+          "filter": ["edge_n_gram_filter", "lowercase"]
+        },
+        "names-search-analyser-si": {
+          "type": "custom",
+          "tokenizer": "icu_tokenizer",
+          "char_filter": ["punctuation_char_filter"],
+          "filter": ["sinhala_stop_filter"]
+        },
+        "english-search-analyzer": {
+          "type": "custom",
+          "tokenizer": "classic",
+          "char_filter": ["punctuation_char_filter"],
+          "filter": ["lowercase", "stop"]
+        }
+      },
+      "char_filter": {
+        "punctuation_char_filter": {
+          "type": "mapping",
+          "mappings": [
+            ".=>\\u0020",
+            "|=>",
+            "-=>",
+            "_=>",
+            "'=>",
+            "/=>",
+            ",=>\\u0020"
+          ]
+        }
+      },
+      "filter": {
+        "edge_n_gram_filter": {
+          "type": "edge_ngram",
+          "min_gram": "2",
+          "max_gram": "10"
+        },
+        "sinhala_stop_filter": {
+          "type": "stop",
+          "stopwords": [
+            "සහ",
+            "හා",
+            "වැනි",
+            "සේ",
+            "‌මෙන්",
+            "සමග",
+            "කල",
+            "කළ",
+            "කරපු",
+            "කරන",
+            "ඇති",
+            "ලද",
+            "ඇත",
+            "කරන",
+            "කළා"
+          ]
+        }
+      }
+    }
+  },
+  "mappings": {
+    "properties": {
+      "song_id": {
+        "type": "integer"
+      },
+      "titile_en": {
+        "type": "text",
+        "analyzer": "english-analyzer",
+        "search_analyzer": "english-search-analyzer"
+      },
+      "title_si": {
+        "type": "text",
+        "analyzer": "names-analyser-si",
+        "search_analyzer": "names-search-analyser-si"
+      },
+      "artist": {
+        "type": "text",
+        "analyzer": "english-analyzer",
+        "search_analyzer": "english-search-analyzer",
+        "fields": {
+          "keyword": {
+            "type": "keyword"
+          }
+        }
+      },
+      "artist_si": {
+        "type": "text",
+        "analyzer": "names-analyser-si",
+        "search_analyzer": "names-search-analyser-si"
+      },
+      "genre": {
+        "type": "text",
+        "analyzer": "english-analyzer",
+        "search_analyzer": "english-search-analyzer",
+        "fields": {
+          "keyword": {
+            "type": "keyword"
+          }
+        }
+      },
+      "genre_si": {
+        "type": "text",
+        "analyzer": "names-analyser-si",
+        "search_analyzer": "names-search-analyser-si"
+      },
+      "writer": {
+        "type": "text",
+        "analyzer": "english-analyzer",
+        "search_analyzer": "english-search-analyzer"
+      },
+      "composer": {
+        "type": "text",
+        "analyzer": "english-analyzer",
+        "search_analyzer": "english-search-analyzer",
+        "fields": {
+          "keyword": {
+            "type": "keyword"
+          }
+        }
+      },
+      "composer_si": {
+        "type": "text",
+        "analyzer": "names-analyser-si",
+        "search_analyzer": "names-search-analyser-si"
+      },
+      "rating": {
+        "type": "integer",
+        "index": false
+      },
+      "lyrics": {
+        "type": "text",
+        "analyzer": "lyrics-analyser-si"
+      }
+    }
+  }
+}
+```
+
+3. Start python server by running the following command in the root directory of the project
+
+```
+python ./search-applicatio/app.py
+```
+
+4. Insert data into the `songs` index by sending a `POST` request to `insert_data` endpoint of the python server
+
+```
+POST http:\\localhost:5000\insert_data
+```
+
+5. Navigate to `http:\\localhost:5000` to view the search application interface
+
+6. Hover over search icon and the search bar will appear. This application provides full-text search functionalities for queries such as follows.
+
+   1. Search can be done for any of the above listed metadata values by directly entering search values into the search bar
+
+   ```
+    අමා රන් පැය, අමා රන් පැය ගීතය, වික්ටර් රත්නායක, වික්ටර් රත්නායක ගැයූ ගීත, සුනිල් එඩිරිසිංහ ලියූ ගීත, සුනිල් එඩිරිසිංහ සංගීතවත් කල ගීත
+   ```
+
+   2. Search for popular songs by including Sinhala key words such as `ජනප්‍රියම`, `ප්‍රසිද්ධ`, `හොඳම` and several others.
+
+   ```
+   ජනප්‍රිය ගීත, හොඳම ගීත
+   ```
+
+   3. By default the above query will return 10 most popular songs. The songs count can be set by including a number into the query.
+
+   ```
+   ජනප්‍රියම ගීත 5. ප්‍රසිද්ධම ගීත 20
+   ```
+
+   4. The above mentioned popular queries can be combined with search queries for metadata
+
+   ```
+   වික්ටර රත්නායක ගැයූ හොඳම ගීත, වික්ටර රත්නායක ගැයූ හොඳම ගීත 5, සුනිල් එඩිරිසිංහ ලියූ ජනප්‍රියම ගීත 20,
+   ```
+
+## Versioning
+
+We use [Git](http://git-scm.com/) for versioning. For the versions available, see the [tags on this repository](https://github.com/your/project/tags).
+
+## Authors
+
+- **Harith Sankalpa** - _Initial work_ - [GithubProfile](https://github.com/harith96)
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details
+
+## Acknowledgments
+
+- Hat tip to [Mr.Yasas Senevirathana]("https://github.com/ysenarath/") for developing such good Sinhala Analytical Tool [Sinling](https://github.com/ysenarath/sinling)
