@@ -27,7 +27,7 @@ def index():
 def insert_data():
     if es.indices.exists(index="songs"):
         data = []
-        with open('E:\projects\IR\sinhala-song-search-engine\py\lyrics_.json', encoding="utf-8") as json_file:
+        with open('../corpus/processed.json', encoding="utf-8") as json_file:
             data = json.load(json_file)
         result = bulk(es, data)
         return jsonify(result), 201
