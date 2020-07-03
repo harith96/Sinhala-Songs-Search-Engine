@@ -1,22 +1,23 @@
 # Sinhala Songs Search Engine
 
-Sinhala Songs Search Search Engine is an elasticsearch based web application with a backend and include details of more than 1000 Sinhala songs. Also, this application provides search-as-you-type functionality with a minimal clean UI implemented with Vue. Users can search for lyrics and based on popularity in Sinhala and for the following metadata in both Sinhala and English languages.
+Sinhala Songs Search Search Engine is an elasticsearch based web application with a Python Flask backend. The included corpus contains details of more than 1000 Sinhala songs. Also, this application provides search-as-you-type functionality with a minimal clean UI implemented with Vue. Users can search
 
-1. Title
-2. Artist
-3. Writer
-4. Composer
-5. Genre
+1. for lyrics and
+2. based on popularity index in Sinhala
+
+and for the following metadata in both Sinhala and English languages.
+
+3. Title
+4. Artist
+5. Writer
+6. Composer
+7. Genre
 
 ## Architecture
 
 ![Image of Yaktocat](images/architecture.png)
 
-## Getting Started
-
-These instructions will get you a copy of the project up and running on your local machine for development and testing purposes.
-
-### Folder Structure
+## Folder Structure
 
 ```
 .
@@ -33,26 +34,34 @@ These instructions will get you a copy of the project up and running on your loc
 +-- search-application - Flask application with UI templates
 ```
 
-### Dataset
+## Dataset
 
 The sinhala songs corpus is created by scraping [SinhalaSongBook](https://sinhalasongbook.com/) website using scrapy web scraping tool.
 
+## Getting Started
+
+These instructions will get you a copy of the project up and running on your local machine for development and testing purposes.
+
 ### Prerequisites
 
-The following softwares/libraries should be installed in your system prior to setting up and running the application on a local or a live environment.
+The following softwares/libraries should be installed in your system properly, prior to setting up and running the application on a local or a live environment.
 
-- [Flask](https://flask.palletsprojects.com/en/1.1.x/) - The web framework used
-- [Elasticsearch](http://www.dropwizard.io/1.0.2/docs/) - Analytical Engine
+- [Elasticsearch 7.8](https://www.elastic.co/guide/en/elasticsearch/reference/7.8/index.html) - Analytical Engine
 - [Sinling](https://github.com/ysenarath/sinling) - Sinhala language tokenizer
-- [Flask CORS](https://flask-cors.readthedocs.io/en/latest/) - Manage CORS in Flask
 
 ### Installing
 
-A step by step series of examples that tell you how to get a development env running
+A step by step series of examples that tell you how to get a development env running.
 
-1. Get elasticsearch server up and running.
+#### Setup Elasticsearch
 
-2. Setup 'songs' index in elasticsearch using `settings.json` in `es` folder as the body.
+1. Install and get elasticsearch server up and running.
+
+2. Install [ICU Analysis](https://www.elastic.co/guide/en/elasticsearch/plugins/current/analysis-icu.html) plugin.
+
+3. Optionally you can install [Kibana](https://www.elastic.co/downloads/kibana) for query operations.
+
+4. Setup 'songs' index in elasticsearch using `settings.json` in `es` folder as the body.
 
 ```
 PUT <elsticsearch-host: port>/songs
@@ -214,49 +223,51 @@ PUT <elsticsearch-host: port>/songs
 }
 ```
 
-3. Start python server by running the following command in the root directory of the project
+#### Setup Flask project
+
+1. Install `pip` dependencies and start python server by running the following command in the root directory of the project
 
 ```
-python ./search-applicatio/app.py
+cd ./search-application
+pip install -r requirements.txt
+python ./app.py
 ```
 
-4. Insert data into the `songs` index by sending a `POST` request to `insert_data` endpoint of the python server
+2. Insert data into the `songs` index by sending a `POST` request to `insert_data` endpoint of the python server
 
 ```
 POST http:\\localhost:5000\insert_data
 ```
 
-5. Navigate to `http:\\localhost:5000` to view the search application interface
+3. Navigate to `http:\\localhost:5000` to view the search application interface
 
-6. Hover over search icon and the search bar will appear. This application provides full-text search functionalities for queries such as follows.
+4. Hover over search icon and the search bar will appear. This application provides full-text search functionalities for queries such as follows.
 
-   1. Search can be done for any of the above listed metadata values by directly entering search values into the search bar
+   1. Search can be done for any of the above listed metadata values by directly entering search values into the search bar or using full text queries
 
    ```
-    අමා රන් පැය, අමා රන් පැය ගීතය, වික්ටර් රත්නායක, වික්ටර් රත්නායක ගැයූ ගීත, සුනිල් එඩිරිසිංහ ලියූ ගීත, සුනිල් එඩිරිසිංහ සංගීතවත් කල ගීත
+    අමා රන් පැය, අමා රන් පැය ගීතය, වික්ටර් රත්නායක, වික්ටර් රත්නායක ගැයූ ගීත, කරුණාරත්න අබේසේකර ලියූ ගීත, සුනිල් එඩිරිසිංහ සංගීතවත් කල ගීත
    ```
 
    2. Search for popular songs by including Sinhala key words such as `ජනප්‍රියම`, `ප්‍රසිද්ධ`, `හොඳම` and several others.
 
    ```
-   ජනප්‍රිය ගීත, හොඳම ගීත
+   ජනප්‍රිය ගීත, හොඳම ගීත, සුපිරි ගීත
    ```
 
    3. By default the above query will return 10 most popular songs. The songs count can be set by including a number into the query.
 
    ```
-   ජනප්‍රියම ගීත 5. ප්‍රසිද්ධම ගීත 20
+   ජනප්‍රියම ගීත 5, ප්‍රසිද්ධම ගීත 20
    ```
 
-   4. The above mentioned popular queries can be combined with search queries for metadata
+   4. The above mentioned popular queries can be combined with queries for metadata.
 
    ```
-   වික්ටර රත්නායක ගැයූ හොඳම ගීත, වික්ටර රත්නායක ගැයූ හොඳම ගීත 5, සුනිල් එඩිරිසිංහ ලියූ ජනප්‍රියම ගීත 20,
+   වික්ටර රත්නායක ගැයූ හොඳම ගීත, වික්ටර රත්නායක ගැයූ හොඳම ගීත 5, සුනිල් එඩිරිසිංහ ලියූ ජනප්‍රියම ගීත 20
    ```
 
-## Versioning
-
-We use [Git](http://git-scm.com/) for versioning. For the versions available, see the [tags on this repository](https://github.com/harith96/Sinhala-Songs-Search-Engine/tags).
+   5. All the alowed combination of words can be found in the `app.py` file.
 
 ## Authors
 
@@ -268,4 +279,4 @@ This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md
 
 ## Acknowledgments
 
-- Hat tip to [Mr.Yasas Senevirathana]("https://github.com/ysenarath/") for developing such good Sinhala Analytical Tool [Sinling](https://github.com/ysenarath/sinling)
+- Hat tip to [Mr Yasas Senevirathana]("https://github.com/ysenarath/") for developing such good Sinhala Analytical Tool [Sinling](https://github.com/ysenarath/sinling)
