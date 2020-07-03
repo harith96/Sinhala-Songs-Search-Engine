@@ -1,12 +1,14 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
 import sys
 sys.path.append("E:\projects\IR\sinhala-song-search-engine\sinling")
-from sinling import word_splitter, SinhalaTokenizer
+from sinling import SinhalaTokenizer
 from datetime import datetime
 from flask import Flask, jsonify, request, send_file
 from elasticsearch import Elasticsearch
 from elasticsearch.helpers import bulk
 from flask_cors import CORS
-from langdetect import detect
 import json
 import re
 
@@ -95,7 +97,7 @@ def build_sinhala_query_body(keywords):
         elif(word.isdigit()):
             number = word
         else:
-            pre_str+= word + "~ "
+            pre_str+= word + " "
 
     composer_field = "composer_si*"
     artist_field = "artist_si*"
@@ -158,9 +160,7 @@ def build_sinhala_query_body(keywords):
                     "query_string": {
                         "query": query_str,
                         "type": "bool_prefix",
-                        "fields": fields,
-                        "fuzziness":3,
-                        "analyze_wildcard": True
+                        "fields": fields
                     }
                 },
                 "sort": [{
@@ -179,7 +179,6 @@ def build_sinhala_query_body(keywords):
                     "query": query_str,
                     "type": "bool_prefix",
                     "fields":fields,
-                    "fuzziness": 3,
                 }
             }
         }
