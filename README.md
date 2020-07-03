@@ -256,7 +256,7 @@ POST http:\\localhost:5000\insert_data
 
 ## Versioning
 
-We use [Git](http://git-scm.com/) for versioning. For the versions available, see the [tags on this repository](https://github.com/your/project/tags).
+We use [Git](http://git-scm.com/) for versioning. For the versions available, see the [tags on this repository](https://github.com/harith96/Sinhala-Songs-Search-Engine/tags).
 
 ## Authors
 
