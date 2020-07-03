@@ -10,7 +10,7 @@ Sinhala Songs Search Search Engine is an elasticsearch based web application wit
 
 ## Architecture
 
-![Image of Yaktocat](https://octodex.github.com/images/yaktocat.png)
+![Image of Yaktocat](images/architecture.png)
 
 ## Getting Started
 
@@ -21,10 +21,14 @@ These instructions will get you a copy of the project up and running on your loc
 ```
 .
 +-- corpus
+|   +-- index_id_add.ipynb - jupyter notebook for adding a id for each song document
 |   +-- lyrics_.json - processed songs corpus
 |   +-- songs.csv - raw songs corpus immediately after scraping
+|   +-- translator.ipynb - jupyter notebook for translating english metadata to sinhala
 +-- es
 |   +-- settings.json - settings and mappings for songs index
++-- images
+|   +-- architecture.png - architecture diagram
 +-- scraping - scrapy project for scraping SinhalaSongBook website
 +-- search-application - Flask application with UI templates
 ```
