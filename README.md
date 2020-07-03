@@ -267,7 +267,7 @@ POST http:\\localhost:5000\insert_data
    වික්ටර රත්නායක ගැයූ හොඳම ගීත, වික්ටර රත්නායක ගැයූ හොඳම ගීත 5, සුනිල් එඩිරිසිංහ ලියූ ජනප්‍රියම ගීත 20
    ```
 
-   5. All the alowed combination of words can be found in the `app.py` file.
+   5. All the alowed combinations of words can be found in the `app.py` file in the list variables.
 
 ## Authors
 
@@ -279,4 +279,4 @@ This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md
 
 ## Acknowledgments
 
-- Hat tip to [Mr Yasas Senevirathana]("https://github.com/ysenarath/") for developing such good Sinhala Analytical Tool [Sinling](https://github.com/ysenarath/sinling)
+- Hat tip to [Mr Yasas Senevirathana](https://github.com/ysenarath/) for developing such good Sinhala Analytical Tool: [Sinling](https://github.com/ysenarath/sinling)
